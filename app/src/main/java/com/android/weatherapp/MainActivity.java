@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 				DialogActivity dialog = new DialogActivity();
 				dialog.show(getSupportFragmentManager(), "custom");
-				
+
 
 				test();
 
