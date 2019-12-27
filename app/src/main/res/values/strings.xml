@@ -1,0 +1,11 @@
+<resources>
+	<string name="app_name">WeatherApp</string>
+	<string name="degree">&#176;C</string>
+	<string name="details">Details</string>
+	<string name="wind">Wind</string>
+	<string name="humidity">Humidity</string>
+	<string name="feels_like">Feels like</string>
+	<string name="pressure">Pressure</string>
+	<string name="city">NEW YORK</string>
+	<string name="country">US</string>
+</resources>
