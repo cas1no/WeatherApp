@@ -127,30 +127,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 				switch (string) {
 
 					case "11d":
+					case "11n":
 
 						getWindow().setBackgroundDrawableResource(R.drawable.thunderstorm);
 
 						break;
 
 					case "09d":
+					case "09n":
 
 						getWindow().setBackgroundDrawableResource(R.drawable.drizzle);
 
 						break;
 
 					case "10d":
+					case "10n":
 
 						getWindow().setBackgroundDrawableResource(R.drawable.rain);
 
 						break;
 
 					case "13d":
+					case "13n":
 
 						getWindow().setBackgroundDrawableResource(R.drawable.snow);
 
 						break;
 
 					case "50d":
+					case "50n":
 
 						getWindow().setBackgroundDrawableResource(R.drawable.atmosphere);
 
