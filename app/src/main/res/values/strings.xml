@@ -6,6 +6,6 @@
 	<string name="humidity">Humidity</string>
 	<string name="feels_like">Feels like</string>
 	<string name="pressure">Pressure</string>
-	<string name="city">NEW YORK</string>
+	<string name="city">New York</string>
 	<string name="country">US</string>
 </resources>

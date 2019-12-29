@@ -6,7 +6,7 @@
 		<!--item name="colorPrimary">@color/colorPrimary</item-->
 		<item name="colorPrimaryDark">@color/colorClear</item>
 		<item name="colorAccent">@color/colorAccent</item>
-		<item name="android:windowBackground">@drawable/thunderstorm</item>
+		<!--item name="android:windowBackground">@drawable/thunderstorm</item-->
 	</style>
 
 </resources>

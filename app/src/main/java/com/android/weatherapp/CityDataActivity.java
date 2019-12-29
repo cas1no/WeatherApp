@@ -3,11 +3,9 @@ package com.android.weatherapp;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class CityDataActivity {
+class CityDataActivity {
 
-	String goodURL = "http://api.openweathermap.org/data/2.5/weather?q=NEW+YORK,US&appid=2252c567272cab39a17aff97fa5b08ac&units=metric";
-
-	public static String main(Context context, String parameter, String data, boolean write) {                        // main(this, .....)
+	static String main(Context context, String parameter, String data, boolean write) {
 
 		SharedPreferences cityAndCountryData = context.getSharedPreferences("Parameter", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = cityAndCountryData.edit();

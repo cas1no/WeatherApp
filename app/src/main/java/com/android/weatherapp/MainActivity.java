@@ -1,21 +1,13 @@
-// http://api.openweathermap.org/data/2.5/weather?q=Minsk&appid=2252c567272cab39a17aff97fa5b08ac&units=metric
-
 package com.android.weatherapp;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, NetworkActivity.TextViewUpdateListener {
 
 	TextView locationText;
 	TextView dateText;
@@ -31,14 +23,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		if (CityDataActivity.main(this, "URL", null, false) == null) {
-
-			CityDataActivity.main(this, "currCity", "NEW+YORK", true);
-			CityDataActivity.main(this, "currCountry", "US", true);
-			CityDataActivity.main(this, "URL", "http://api.openweathermap.org/data/2.5/weather?q=NEW+YORK,US&appid=2252c567272cab39a17aff97fa5b08ac&units=metric", true);
-
-		}
-
 		findViewById(R.id.buttonUpdate).setOnClickListener(this);
 		findViewById(R.id.buttonSelectCity).setOnClickListener(this);
 
@@ -51,24 +35,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 		feelsLikeText = findViewById(R.id.textFeelsLikeData);
 		pressureText = findViewById(R.id.textPressureData);
 
+		if (CityDataActivity.main(this, "URL", null, false) == null) {
 
-		//onStart();
-		//updateWeatherData();
-		//setContentView(R.layout.activity_main);
-	}
+			CityDataActivity.main(this, "currCity", "NEW+YORK", true);
+			CityDataActivity.main(this, "currCountry", "US", true);
+			CityDataActivity.main(this, "URL", "https://api.openweathermap.org/data/2.5/weather?q=NEW+YORK,US&appid=2252c567272cab39a17aff97fa5b08ac&units=metric", true);
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		updateWeatherData();
-		//setContentView();
-	}
+		}
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		updateWeatherData();
-		//setContentView();
+		NetworkActivity.main(this);
+
 	}
 
 	@Override
@@ -78,98 +54,141 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 			case R.id.buttonUpdate:
 
-				//CityDataActivity.main(this, "URL", "http://api.openweathermap.org/data/2.5/weather?q=MINSK,BY&appid=2252c567272cab39a17aff97fa5b08ac&units=metric", true);
-				updateWeatherData();//CityDataActivity.main(this, "URL", "http://api.openweathermap.org/data/2.5/weather?q=LOS+ANGELES,US&appid=2252c567272cab39a17aff97fa5b08ac&units=metric", true);
+				NetworkActivity.main(this);
 
 				break;
+
 			case R.id.buttonSelectCity:
 
+				FragmentManager manager = getSupportFragmentManager();
 				DialogActivity dialog = new DialogActivity();
-				dialog.show(getSupportFragmentManager(), "custom");
-
-
-				test();
+				dialog.show(manager, "dialog");
 
 				break;
 
 		}
 	}
 
+	@Override
+	public void textViewUpdate(String location, String string) {
 
-	public void test() {
+		switch (location) {
 
-		String tempURL = CityDataActivity.main(this, "URL", null, false).replace(CityDataActivity.main(this, "currCity", null, false), DialogActivity.tempCity);
-		CityDataActivity.main(this, "URL", tempURL, true);
-		updateWeatherData();
-		dateText.setText(CityDataActivity.main(this, "URL", null, false));
+			case "locationText":
 
-	}
+				locationText.setText(string);
 
-	public void responseAction(JSONObject weatherData) {
+				break;
 
-		try {
+			case "dateText":
 
-			java.util.Date currentDate = new java.util.Date(Long.valueOf(weatherData.getString("dt")) * 1000L);
-			Calendar calendar = GregorianCalendar.getInstance();
-			calendar.setTime(currentDate);
+				dateText.setText(string);
 
-			locationText.setText(weatherData.getString("name"));
-			dateText.setText(String.format("Updated %s", currentDate));
-			temperatureText.setText(weatherData.getJSONObject("main").getString("temp"));
+				break;
 
-			switch (weatherData.getJSONArray("weather").getJSONObject(0).getString("main")) {
+			case "temperatureText":
 
-				case "Thunderstorm":
-					getWindow().setBackgroundDrawableResource(R.drawable.thunderstorm);
-					weatherConditionText.setText(String.format("%s", "Thunderstorm"));
-					break;
-				case "Drizzle":
-					getWindow().setBackgroundDrawableResource(R.drawable.drizzle);
-					weatherConditionText.setText(String.format("%s", "Drizzle"));
-					break;
-				case "Rain":
-					getWindow().setBackgroundDrawableResource(R.drawable.rain);
-					weatherConditionText.setText(String.format("%s", "Rain"));
-					break;
-				case "Snow":
-					getWindow().setBackgroundDrawableResource(R.drawable.snow);
-					weatherConditionText.setText(String.format("%s", "Snow"));
-					break;
-				case "Clear":
-					if (calendar.get(Calendar.HOUR_OF_DAY) <= 20 && calendar.get(Calendar.HOUR_OF_DAY) >= 4)
+				temperatureText.setText(string);
+
+				break;
+
+			case "weatherConditionText":
+
+				weatherConditionText.setText(string);
+
+				break;
+
+			case "windDataText":
+
+				windDataText.setText(string);
+
+				break;
+
+			case "humidityDataText":
+
+				humidityDataText.setText(string);
+
+				break;
+
+			case "feelsLikeText":
+
+				feelsLikeText.setText(string);
+
+				break;
+
+			case "pressureText":
+
+				pressureText.setText(string);
+
+				break;
+
+			case "background":
+
+				switch (string) {
+
+					case "11d":
+
+						getWindow().setBackgroundDrawableResource(R.drawable.thunderstorm);
+
+						break;
+
+					case "09d":
+
+						getWindow().setBackgroundDrawableResource(R.drawable.drizzle);
+
+						break;
+
+					case "10d":
+
+						getWindow().setBackgroundDrawableResource(R.drawable.rain);
+
+						break;
+
+					case "13d":
+
+						getWindow().setBackgroundDrawableResource(R.drawable.snow);
+
+						break;
+
+					case "50d":
+
+						getWindow().setBackgroundDrawableResource(R.drawable.atmosphere);
+
+						break;
+
+
+					case "01d":
+
 						getWindow().setBackgroundDrawableResource(R.drawable.clear_day);
-					else
+
+						break;
+
+					case "01n":
+
 						getWindow().setBackgroundDrawableResource(R.drawable.clear_night);
-					weatherConditionText.setText(String.format("%s", "Clear"));
-					break;
-				case "Clouds":
-					if (calendar.get(Calendar.HOUR_OF_DAY) <= 20 && calendar.get(Calendar.HOUR_OF_DAY) >= 4)
+
+						break;
+
+					case "02d":
+					case "03d":
+					case "04d":
+
 						getWindow().setBackgroundDrawableResource(R.drawable.clouds_day);
-					else
+
+						break;
+
+					case "02n":
+					case "03n":
+					case "04n":
+
 						getWindow().setBackgroundDrawableResource(R.drawable.clouds_night);
-					weatherConditionText.setText(String.format("%s", "Clouds"));
-					break;
-				default:
-					getWindow().setBackgroundDrawableResource(R.drawable.atmosphere);
-					weatherConditionText.setText(String.format("%s", "Atmosphere"));
-					break;
 
-			}
+						break;
 
-			windDataText.setText(String.format("%s m/s, %s deg", weatherData.getJSONObject("wind").getString("speed"), weatherData.getJSONObject("wind").getString("deg")));
-			humidityDataText.setText(String.format("%s %%", weatherData.getJSONObject("main").getString("humidity")));
-			feelsLikeText.setText(String.format("%s %s", weatherData.getJSONObject("main").getString("feels_like"), Html.fromHtml("&#176;C")));
-			pressureText.setText(String.format("%s hPa", weatherData.getJSONObject("main").getString("pressure")));
+				}
 
-		} catch (JSONException e) {
-			//
+				break;
+
 		}
-	}
-
-	public void updateWeatherData() {
-
-		NetworkActivity.main(this);
-		responseAction(NetworkActivity.jsonReceivedWeatherData);
-
 	}
 }
