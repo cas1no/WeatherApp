@@ -54,6 +54,8 @@ public class DialogActivity extends DialogFragment {
 
 						Toast.makeText(getActivity(), "Fill the form.", Toast.LENGTH_LONG).show();
 
+						dialog.cancel();
+
 					}
 				}
 			});
